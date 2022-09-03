@@ -116,7 +116,22 @@ class BoterKaasEieren:
         ## Geef beurt door
         self.geefBeurtDoor()    
 
+def inputZet(spel):
+    rij = input(f"{spel.spelerfiches[0]}, kies een rij (1 t/m {spel.dimbord}): ")
+    kol = input(f"{spel.spelerfiches[0]}, kies een kolom (1 t/m {spel.dimbord}): ")
+    spel.actie(int(rij),int(kol))
 
-spel = BoterKaasEieren(2,2,2)
+def nieuwSpel():
+    bordformaat = input("Voer een getal in voor het formaat bord (N*N): ")
+    nwinst = input("Kies het aantal fiches op een rij voor winst: ")
+    nspelers = input("Kies het aantal spelers: ")
+    return BoterKaasEieren(int(bordformaat),int(nwinst),int(nspelers))
 
-print(spel)
+spel = nieuwSpel()
+while True:
+    print(spel)
+    inputZet(spel)
+    if spel.winnaar is not None:
+        print(spel)
+        spel = nieuwSpel()
+
