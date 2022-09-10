@@ -20,7 +20,7 @@ class BoterKaasEieren:
                 f"\n{self.spelerfiches[0]} is aan de beurt." 
         else: 
             status = f"Het spel is afgelopen.\n{self.winnaar} heeft gewonnen!"  
-        return horizontalbar.join(out) + "\n\n" + status
+        return "\n" + horizontalbar.join(out) + "\n" + status
 
     def geefBeurtDoor(self):
         self.spelerfiches = self.spelerfiches[1:] + [self.spelerfiches[0]]
@@ -52,7 +52,8 @@ class BoterKaasEieren:
             return out
 
         def checkDiagonaal(bord):
-            startcoordinaten = [(i,0) for i in range(self.dimbord)] + [(0,i) for i in range(1,self.dimbord)]
+            startcoordinaten = [(i,0) for i in range(self.dimbord)] + \
+                [(0,i) for i in range(1,self.dimbord)]
             diagonalen = []
             for coord in startcoordinaten:
                 diagonaal = [coord]
@@ -119,19 +120,26 @@ class BoterKaasEieren:
 def inputZet(spel):
     rij = input(f"{spel.spelerfiches[0]}, kies een rij (1 t/m {spel.dimbord}): ")
     kol = input(f"{spel.spelerfiches[0]}, kies een kolom (1 t/m {spel.dimbord}): ")
-    spel.actie(int(rij),int(kol))
+    try: 
+        spel.actie(int(rij),int(kol))
+    except: 
+        print(f"Rij {rij} en kolom {kol} is niet geldig. Probeer opnieuw.")
+        inputZet(spel)
+
 
 def nieuwSpel():
     bordformaat = input("Voer een getal in voor het formaat bord (N*N): ")
     nwinst = input("Kies het aantal fiches op een rij voor winst: ")
     nspelers = input("Kies het aantal spelers: ")
-    return BoterKaasEieren(int(bordformaat),int(nwinst),int(nspelers))
+    try: 
+        return BoterKaasEieren(int(bordformaat),int(nwinst),int(nspelers))
+    except: 
+        print("Input ongeldig, probeer het nog eens.")
+        return nieuwSpel()
 
 spel = nieuwSpel()
-while True:
+while spel.winnaar is None:
     print(spel)
     inputZet(spel)
-    if spel.winnaar is not None:
-        print(spel)
-        spel = nieuwSpel()
+print(spel)
 
